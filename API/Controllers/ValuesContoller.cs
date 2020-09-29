@@ -16,8 +16,6 @@ namespace API.Controllers
 
         public ValuesController(DataContext context)
         {
-
-            int i = 0;
             _context = context;
         }
 
