@@ -33,6 +33,15 @@ namespace API
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "corspolicy",
+                                builder =>
+                                {
+                                    builder.WithOrigins("http://localhost:3000");
+                                });
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -50,9 +59,11 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("corspolicy");
 
             app.UseAuthorization();
 
