@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, GridColumn, List } from "semantic-ui-react";
+import { Grid, List } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
 import ActivityDetails from "../details/ActivityDetails";
 import ActivityForm from "../form/ActivityForm";
@@ -12,6 +12,9 @@ interface IProps {
   editMode: boolean;
   setEditMode: (editMode: boolean) => void;
   setSelectedActivity: (activity: IActivity | null) => void;
+  createActivity: (activity: IActivity) => void;
+  editActivity: (activity: IActivity) => void;
+  deleteActivity: (id: string) => void;
 }
 
 const ActivityDashBoard: React.FC<IProps> = ({
@@ -21,6 +24,9 @@ const ActivityDashBoard: React.FC<IProps> = ({
   editMode,
   setEditMode,
   setSelectedActivity,
+  createActivity,
+  editActivity,
+  deleteActivity,
 }) => {
   return (
     <Grid>
@@ -29,6 +35,7 @@ const ActivityDashBoard: React.FC<IProps> = ({
           <ActivityList
             activities={activities}
             selectActivity={selectActivity}
+            deleteActivity={deleteActivity}
           ></ActivityList>
         </List>
       </Grid.Column>
@@ -43,8 +50,11 @@ const ActivityDashBoard: React.FC<IProps> = ({
         )}
         {editMode && (
           <ActivityForm
+            key={(selectedActivity && selectedActivity.id) || 0}
             setEditMode={setEditMode}
             activity={selectedActivity!}
+            createActivity={createActivity}
+            editActivity={editActivity}
           ></ActivityForm>
         )}
       </Grid.Column>
