@@ -6,7 +6,6 @@ import { IActivity } from "../models/activity";
 configure({ enforceActions: "always" });
 
 class ActivityStore {
-  @observable title = "From mobx";
   @observable activityRegistry = new Map();
   @observable activities: IActivity[] = [];
   @observable selectedActivity: IActivity | undefined;
@@ -22,11 +21,10 @@ class ActivityStore {
   }
 
   @action loadActivities = async () => {
-    this.title = "getting activities";
     this.loadingIntial = true;
     try {
       const activities = await agent.Activities.list();
-      runInAction(() => {
+      runInAction("Loading Activities", () => {
         activities.forEach((activity) => {
           activity.date = activity.date.split(".")[0];
           this.activityRegistry.set(activity.id, activity);
@@ -45,7 +43,7 @@ class ActivityStore {
     this.submitting = true;
     try {
       await agent.Activities.create(activity);
-      runInAction(() => {
+      runInAction("Create Activity", () => {
         this.activityRegistry.set(activity.id, activity);
         this.editMode = false;
         this.submitting = false;
@@ -62,7 +60,7 @@ class ActivityStore {
     this.submitting = true;
     try {
       await agent.Activities.update(activity.id, activity);
-      runInAction(() => {
+      runInAction("Edit Activity", () => {
         this.activityRegistry.set(activity.id, activity);
         this.selectedActivity = activity;
         this.editMode = false;
@@ -84,7 +82,7 @@ class ActivityStore {
     this.target = event.currentTarget.name;
     try {
       await agent.Activities.delete(id);
-      runInAction(() => {
+      runInAction("Delete Activity", () => {
         this.activityRegistry.delete(id);
         this.submitting = false;
         this.target = "";

@@ -6,16 +6,13 @@ import NavBar from "../../features/nav/NavBar";
 import ActivityDashBoard from "../../features/activities/dashboard/ActivityDashBoard";
 import LoadingComponent from "./LoadingComponent";
 import ActivityStore from "../stores/activityStore";
-import TestStore from "../stores/testStore";
 
 const App = () => {
   const activityStore = useContext(ActivityStore);
-  const testStore = useContext(TestStore);
 
   useEffect(() => {
     activityStore.loadActivities();
-    //testStore.changeTitle();
-  }, [testStore]);
+  }, [activityStore]);
 
   if (activityStore.loadingIntial)
     return (
