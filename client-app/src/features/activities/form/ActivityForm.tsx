@@ -10,6 +10,26 @@ import { Form as FinalForm, Field } from "react-final-form";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
 import SelectInput from "../../../app/common/form/SelectInput";
 import { category } from "../../../app/common/options/categoryOptions";
+import {
+  combineValidators,
+  composeValidators,
+  hasLengthGreaterThan,
+  isRequired,
+} from "revalidate";
+
+const validate = combineValidators({
+  title: isRequired({ message: "The event title is required." }),
+  category: isRequired("Category"),
+  description: composeValidators(
+    isRequired("Description"),
+    hasLengthGreaterThan(4)({
+      message: "Description needs to be atleast 5 characters.",
+    })
+  )(),
+  city: isRequired("City"),
+  venue: isRequired("Venue"),
+  date: isRequired("Date"),
+});
 
 interface DetailParam {
   id: string;
@@ -55,9 +75,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParam>> = ({
       <Grid.Column width={10}>
         <Segment clearing>
           <FinalForm
+            validate={validate}
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit }) => (
+            render={({ handleSubmit, invalid, pristine }) => (
               <Form onSubmit={handleSubmit}>
                 <Field
                   name="title"
@@ -99,6 +120,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailParam>> = ({
                   component={TextInput}
                 />
                 <Button
+                  disabled={invalid || pristine}
                   positive
                   floated="right"
                   type="submit"
