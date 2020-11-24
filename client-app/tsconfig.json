@@ -15,7 +15,8 @@
     "noEmit": true,
     "jsx": "react",
     "experimentalDecorators": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "./typings-custom/**/*.ts"]
 }
